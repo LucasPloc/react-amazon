@@ -1,10 +1,9 @@
 import ProductItem from './ProductItem';
-import data from '../../data';
 
-const ProductsList = () => {
+const ProductsList = ({ products }) => {
   return (
     <ul className='products'>
-      {data.products.map((product) => (
+      {products.map((product) => (
         <ProductItem product={product} />
       ))}
     </ul>
