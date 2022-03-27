@@ -8,18 +8,13 @@ html {
   font-size: 62.5%;
 }
 main {
-  padding: 1rem;
+  flex: 1;
 }
 
-header {
-  background-color: #404040;
-  padding: 1rem;
+.site-container {
+  min-height: 100vh;
 }
-header a {
-  color: #fff;
-  font-weight: bold;
-  text-decoration: none;
-}
+
 .products {
   display: flex;
   flex-wrap: wrap;
