@@ -1,12 +1,7 @@
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
-html {
-  font-size: 62.5%;
-}
 main {
   flex: 1;
 }
@@ -27,6 +22,9 @@ main {
 .btn-primary {
   background-color: #f0c040;
   color: #000000;
+}
+.img-large {
+  max-width: 100%;
 }
 /* .product {
   border: 1px solid #404040;
