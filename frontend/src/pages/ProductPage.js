@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useContext } from 'react';
 import { CartContext } from '../context/CartContext';
 import { Row, Col, ListGroup, Card, Badge, Button } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Rating from '../components/products/Rating';
 import { Helmet } from 'react-helmet-async';
@@ -26,6 +26,7 @@ const reducer = (state, action) => {
 const ProductPage = () => {
   const { state, dispatch: ctxDispatch } = useContext(CartContext);
   const { slug } = useParams();
+  const navigate = useNavigate();
   const { cart } = state;
 
   const [{ loading, error, product }, dispatch] = useReducer(reducer, {
@@ -46,6 +47,7 @@ const ProductPage = () => {
       type: 'ADD_ITEM',
       payload: { ...product, quantity: productQuantity },
     });
+    navigate('/cart');
   };
 
   useEffect(() => {
