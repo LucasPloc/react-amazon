@@ -4,6 +4,9 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Rating from '../components/products/Rating';
 import { Helmet } from 'react-helmet-async';
+import LoadingBox from '../components/ui/LoadingBox';
+import MessageBox from '../components/ui/MessageBox';
+import { getError } from '../utils';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -34,16 +37,16 @@ const ProductPage = () => {
         const result = await axios.get(`/api/product/slug/${slug}`);
         dispatch({ type: 'FETCH_SUCCESS', payload: result.data });
       } catch (err) {
-        dispatch({ type: 'FETCH_FAIL', payload: err.message });
+        dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
       }
     };
     fetchData();
   }, [slug]);
 
   return loading ? (
-    <div>Loading...</div>
+    <LoadingBox />
   ) : error ? (
-    <div>{error}</div>
+    <MessageBox variant='danger'>{error}</MessageBox>
   ) : (
     <div>
       <Row>

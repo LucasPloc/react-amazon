@@ -3,6 +3,8 @@ import axios from 'axios';
 import logger from 'use-reducer-logger';
 import { Helmet } from 'react-helmet-async';
 import ProductsList from '../components/products/ProductsList';
+import LoadingBox from '../components/ui/LoadingBox';
+import MessageBox from '../components/ui/MessageBox';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -43,9 +45,9 @@ const HomePage = () => {
       </Helmet>
       <h1>Featured Products</h1>
       {loading ? (
-        <div>Loading...</div>
+        <LoadingBox />
       ) : error ? (
-        <div>{error}</div>
+        <MessageBox variant='danger'>{error}</MessageBox>
       ) : (
         <ProductsList products={products} />
       )}
