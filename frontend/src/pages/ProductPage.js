@@ -1,4 +1,5 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useContext } from 'react';
+import { CartContext } from '../context/CartContext';
 import { Row, Col, ListGroup, Card, Badge, Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -23,6 +24,7 @@ const reducer = (state, action) => {
 };
 
 const ProductPage = () => {
+  const { state, dispatch: ctxDispatch } = useContext(CartContext);
   const { slug } = useParams();
 
   const [{ loading, error, product }, dispatch] = useReducer(reducer, {
@@ -30,6 +32,11 @@ const ProductPage = () => {
     error: '',
     product: [],
   });
+
+  const addToCartHandler = () => {
+    ctxDispatch({ type: 'ADD_ITEM', payload: { ...product, quantity: 1 } });
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       dispatch({ type: 'FETCH_REQUEST' });
@@ -95,7 +102,9 @@ const ProductPage = () => {
                 {product.countInStock > 0 && (
                   <ListGroup.Item>
                     <div className='d-grid'>
-                      <Button variant='primary'>Add to Cart</Button>
+                      <Button onClick={addToCartHandler} variant='primary'>
+                        Add to Cart
+                      </Button>
                     </div>
                   </ListGroup.Item>
                 )}
