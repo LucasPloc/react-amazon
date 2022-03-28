@@ -21,17 +21,24 @@ main {
   list-style: none;
   justify-content: center;
 }
-.product {
+.rating span {
+  color: #ffc000;
+}
+.btn-primary {
+  background-color: #f0c040;
+  color: #000000;
+}
+/* .product {
   border: 1px solid #404040;
   margin: 1rem;
-}
-.product img {
+} */
+/* .product img {
   width: 100%;
   max-width: 35rem;
-}
-.product-info {
+} */
+/* .product-info {
   padding: 2rem;
 }
 .product-info p {
   margin-bottom: 1rem;
-}
+} */

@@ -1,12 +1,18 @@
+import { Row, Col } from 'react-bootstrap';
 import ProductItem from './ProductItem';
 
 const ProductsList = ({ products }) => {
   return (
-    <ul className='products'>
-      {products.map((product) => (
-        <ProductItem key={product.slug} product={product} />
-      ))}
-    </ul>
+    <Row>
+      {' '}
+      <ul className='products'>
+        {products.map((product) => (
+          <Col sm={6} md={4} lg={3} className='mb-3' key={product.slug}>
+            <ProductItem product={product} />
+          </Col>
+        ))}
+      </ul>
+    </Row>
   );
 };
 
