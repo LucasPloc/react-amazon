@@ -1,5 +1,9 @@
 const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const data = require('./data');
+
+dotenv.config();
 
 const app = express();
 
@@ -29,6 +33,14 @@ app.get('/api/product/:id', (req, res) => {
 
 const port = process.env.PORT || 5000;
 
-app.listen(port, () => {
-  console.log(`Server is running`);
-});
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log('connected to db');
+    app.listen(port, () => {
+      console.log(`Server is running`);
+    });
+  })
+  .catch((err) => {
+    console.log(err.message);
+  });
