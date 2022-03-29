@@ -1,15 +1,40 @@
 import { useContext } from 'react';
+import axios from 'axios';
 import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Row, Col, ListGroup, Button, Card } from 'react-bootstrap';
 import { CartContext } from '../context/CartContext';
 import MessageBox from '../components/ui/MessageBox';
 
 const CartPage = () => {
+  const navigate = useNavigate();
   const { state, dispatch: ctxDispatch } = useContext(CartContext);
   const {
     cart: { cartItems },
   } = state;
+
+  const updateCartHandler = async (item, quantity) => {
+    const { data } = await axios.get(`/api/product/${item._id}`);
+    if (data.countInStock < quantity) {
+      window.alert('Sorry, product is out of stock.');
+      return;
+    }
+    ctxDispatch({
+      type: 'ADD_ITEM',
+      payload: { ...item, quantity },
+    });
+  };
+
+  const removeItemHandler = (item) => {
+    ctxDispatch({
+      type: 'REMOVE_ITEM',
+      payload: item,
+    });
+  };
+
+  const checkoutHandler = () => {
+    navigate('/signin?redirect=/shipping');
+  };
 
   return (
     <div>
@@ -37,11 +62,20 @@ const CartPage = () => {
                       <Link to={`/product/${item.slug}`}>{item.name}</Link>
                     </Col>
                     <Col md={3}>
-                      <Button variant='light' disabled={item.quantity === 1}>
+                      <Button
+                        onClick={() =>
+                          updateCartHandler(item, item.quantity - 1)
+                        }
+                        variant='light'
+                        disabled={item.quantity === 1}
+                      >
                         <i className='fas fa-minus-circle'></i>
                       </Button>{' '}
                       <span>{item.quantity}</span>{' '}
                       <Button
+                        onClick={() =>
+                          updateCartHandler(item, item.quantity + 1)
+                        }
                         variant='light'
                         disabled={item.quantity === item.countInStock}
                       >
@@ -50,7 +84,10 @@ const CartPage = () => {
                     </Col>
                     <Col md={3}>{item.price}</Col>
                     <Col md={2}>
-                      <Button variant='light'>
+                      <Button
+                        onClick={() => removeItemHandler(item)}
+                        variant='light'
+                      >
                         <i className='fas fa-trash'></i>
                       </Button>
                     </Col>
@@ -77,6 +114,7 @@ const CartPage = () => {
                       type='button'
                       variant='primary'
                       disabled={cartItems.length === 0}
+                      onClick={checkoutHandler}
                     >
                       Proceed to Checkout
                     </Button>
