@@ -38,7 +38,7 @@ const ProductPage = () => {
   const addToCartHandler = async () => {
     const existItem = cart.cartItems.find((item) => item._id === product._id);
     const productQuantity = existItem ? existItem.quantity + 1 : 1;
-    const { data } = await axios.get(`/api/product/${product._id}`);
+    const { data } = await axios.get(`/api/products/${product._id}`);
     if (data.countInStock < productQuantity) {
       window.alert('Sorry, product is out of stock.');
       return;
@@ -54,7 +54,7 @@ const ProductPage = () => {
     const fetchData = async () => {
       dispatch({ type: 'FETCH_REQUEST' });
       try {
-        const result = await axios.get(`/api/product/slug/${slug}`);
+        const result = await axios.get(`/api/products/slug/${slug}`);
         dispatch({ type: 'FETCH_SUCCESS', payload: result.data });
       } catch (err) {
         dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
