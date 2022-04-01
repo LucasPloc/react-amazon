@@ -47,7 +47,6 @@ const SignInPage = () => {
         <Form.Group className='mb-3' controlId='email'>
           <Form.Label>Email</Form.Label>
           <Form.Control
-            autoComplete
             onChange={(e) => setEmail(e.target.value)}
             type='email'
             required
@@ -56,7 +55,6 @@ const SignInPage = () => {
         <Form.Group className='mb-3' controlId='password'>
           <Form.Label>Password</Form.Label>
           <Form.Control
-            autoComplete
             onChange={(e) => setPassword(e.target.value)}
             type='password'
             required
