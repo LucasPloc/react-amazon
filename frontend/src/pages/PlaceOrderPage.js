@@ -1,14 +1,37 @@
-import { useContext, useEffect } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useContext, useEffect, useReducer } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, Col, ListGroup, Row, Button } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 import CheckoutSteps from '../components/checkout/CheckoutSteps';
 import { CartContext } from '../context/CartContext';
+import { getError } from '../utils';
+import LoadingBox from '../components/ui/LoadingBox';
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'CREATE_REQUEST':
+      return { ...state, loading: true };
+
+    case 'CREATE_SUCCESS':
+      return { ...state, loading: false };
+
+    case 'CREATE_FAIL':
+      return { ...state, loading: false };
+
+    default:
+      return state;
+  }
+};
 
 const PlaceOrderPage = () => {
+  const navigate = useNavigate();
+  const [{ loading }, dispatch] = useReducer(reducer, {
+    loading: false,
+  });
   const { state, dispatch: ctxDispatch } = useContext(CartContext);
   const { cart } = state;
-  const navigate = useNavigate();
 
   let cartItemsPrice = cart.cartItems.reduce(
     (a, c) => a + c.quantity * c.price,
@@ -19,7 +42,36 @@ const PlaceOrderPage = () => {
   const taxPrice = cartItemsPrice * 0.15;
   const totalPrice = cartItemsPrice + shippingPrice + taxPrice;
 
-  const placeOrderHandler = async () => {};
+  const placeOrderHandler = async () => {
+    try {
+      dispatch({ type: 'CREATE_REQUEST' });
+
+      const data = await axios.post(
+        '/api/orders',
+        {
+          orderItems: cart.cartItems,
+          shippingAddress: cart.shippingAddress,
+          paymentMethod: cart.paymentMethod,
+          itemsPrice: cartItemsPrice,
+          shippingPrice,
+          taxPrice,
+          totalPrice,
+        },
+        {
+          headers: {
+            authorization: `Bearer ${state.userInfo.token}`,
+          },
+        }
+      );
+      ctxDispatch({ type: 'CART_CLEAR' });
+      dispatch({ type: 'CREATE_SUCCESS' });
+      localStorage.removeItem('cartItems');
+      navigate(`/order/${data.data.order._id}`);
+    } catch (err) {
+      dispatch({ type: 'CREATE_FAIL' });
+      toast.error(getError(err));
+    }
+  };
 
   useEffect(() => {
     if (!cart.paymentMethod) {
@@ -124,6 +176,7 @@ const PlaceOrderPage = () => {
                       Place Order
                     </Button>
                   </div>
+                  {loading && <LoadingBox />}
                 </ListGroup.Item>
               </ListGroup>
             </Card.Body>
