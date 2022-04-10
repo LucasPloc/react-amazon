@@ -15,6 +15,7 @@ import {
   SignInPage,
   SignUpPage,
   OrderPage,
+  OrderHistoryPage,
 } from './pages';
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
               <Route path='/payment' element={<PaymentMethodPage />} />
               <Route path='/placeorder' element={<PlaceOrderPage />} />
               <Route path='/order/:id' element={<OrderPage />} />
+              <Route path='/orderhistory' element={<OrderHistoryPage />} />
             </Routes>
           </Container>
         </main>
