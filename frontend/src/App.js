@@ -16,6 +16,7 @@ import {
   SignUpPage,
   OrderPage,
   OrderHistoryPage,
+  ProfilePage,
 } from './pages';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
     localStorage.removeItem('userInfo');
     localStorage.removeItem('shippingAddress');
     localStorage.removeItem('paymentMethod');
+    window.location.href = '/signin';
   };
 
   return (
@@ -44,6 +46,7 @@ function App() {
               <Route path='/cart' element={<CartPage />} />
               <Route path='/signin' element={<SignInPage />} />
               <Route path='/signup' element={<SignUpPage />} />
+              <Route path='/profile' element={<ProfilePage />} />
               <Route path='/shipping' element={<ShippingPage />} />
               <Route path='/payment' element={<PaymentMethodPage />} />
               <Route path='/placeorder' element={<PlaceOrderPage />} />
